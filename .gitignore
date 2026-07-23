@@ -1,0 +1,34 @@
+# Gradle and build output
+.gradle/
+**/build/
+
+# Local machine configuration
+local.properties
+*.keystore
+*.jks
+
+# Android Studio / IntelliJ IDEA
+.idea/
+*.iml
+
+# Kotlin compiler caches
+.kotlin/
+
+# Native build output
+.externalNativeBuild/
+.cxx/
+
+# Android tooling output
+captures/
+.navigation/
+
+# Profiling and crash dumps
+*.hprof
+*.log
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+
+# Firebase / Google services local configuration
+firebaseAppDistributionServiceCredentialsFile.json
