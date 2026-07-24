@@ -1,4 +1,4 @@
-package com.semorka.fundly
+package com.semorka.fundly.core
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -12,26 +12,20 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import com.semorka.fundly.core.navigation.AppNavigation
 import com.semorka.fundly.core.navigation.Screen
 import com.semorka.fundly.core.navigation.allScreens
 
-@Composable fun FundlyApp() {
-    val backStack = remember { mutableStateListOf<Screen>(Screen.Home)}
+@Composable fun ScreenPreview(screen: @Composable () -> Unit, barScreen: Screen = Screen.Home){
+    val backStack = remember { mutableStateListOf(barScreen)}
     val currentScreen = backStack.lastOrNull()
     Scaffold(
         bottomBar = {
             NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
                 allScreens.forEach { tab ->
                     NavigationBarItem(
-                        tab == currentScreen,
-                        onClick = {
-                            if (currentScreen != tab) {
-                                backStack.removeAll {it == tab}
-                                backStack.add(tab)
-                            }
-                        },
-                        {
+                        selected = tab == currentScreen,
+                        onClick = {},
+                        icon = {
                             Icon(
                                 painter = painterResource(tab.iconRes),
                                 contentDescription = tab.title
@@ -43,7 +37,7 @@ import com.semorka.fundly.core.navigation.allScreens
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            AppNavigation(backStack)
+            screen()
         }
     }
 }
