@@ -1,26 +1,49 @@
 package com.semorka.fundly.features.home.presentation
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkCapabilities
-import android.widget.Toast
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.semorka.fundly.core.ScreenPreview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.semorka.fundly.core.data.DatastoreViewModel
+import com.semorka.fundly.core.data.room.DatabaseViewModel
+import com.semorka.fundly.core.data.room.ExpenseEntity
+import com.semorka.fundly.ui.ScreenPreview
 
 @Composable fun HomeScreen(){
-    Text("Fundle")
+    val dbViewModel: DatabaseViewModel = hiltViewModel()
+    val dstViewModel: DatastoreViewModel = hiltViewModel()
+    val expenses by dbViewModel.expenses.collectAsStateWithLifecycle()
+    val funds by dstViewModel.userFundsFlow.collectAsStateWithLifecycle()
+
+    HomeScreenContent(
+        funds = funds,
+        expenses = expenses
+    )
+}
+
+@Composable
+fun HomeScreenContent(
+    funds: Int,
+    expenses: List<ExpenseEntity>
+) {
+    Column {
+        if (funds > 0) {
+            Text("Your funds > 0")
+        }
+        expenses.forEach { expense ->
+            Text(expense.cost.toString())
+        }
+    }
 }
 
 @Preview
-@Composable private fun HomeScreenPreview() = ScreenPreview( { HomeScreen() })
+@Composable
+private fun HomeScreenPreview() {
+    HomeScreenContent(
+        funds = 100,
+        expenses = emptyList()
+    )
+}

@@ -1,4 +1,4 @@
-package com.semorka.fundly.core
+package com.semorka.fundly.ui
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

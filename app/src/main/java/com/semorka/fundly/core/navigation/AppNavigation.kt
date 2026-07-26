@@ -7,10 +7,10 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import com.semorka.fundly.features.home.presentation.HomeScreen
 
-@Composable fun AppNavigation(backStack: MutableList<Screen>){
+@Composable fun AppNavigation(backStack: List<Screen>, onBack: () -> Unit){
     NavDisplay(
         backStack = backStack,
-        onBack = { backStack.removeLastOrNull() },
+        onBack = {onBack},
         entryProvider = { key ->
             when (key) {
                 Screen.Home -> NavEntry(key) {
@@ -18,9 +18,7 @@ import com.semorka.fundly.features.home.presentation.HomeScreen
                 }
 
                 Screen.Menu -> NavEntry(key) {
-                    Button(onClick = {backStack.add(Screen.Home)}) {
-                        Text("to home")
-                    }
+                    Text("Меню")
                 }
             }
         }
