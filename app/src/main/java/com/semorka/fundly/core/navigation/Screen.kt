@@ -19,9 +19,15 @@ sealed interface Screen {
         override val title = "Menu"
         override val iconRes = R.drawable.ic_menu
     }
+    @Serializable
+    data object Expense : BottomNavTab {
+        override val title = "Expense"
+        override val iconRes = R.drawable.ic_expense
+    }
 }
 
-val allScreens = listOf(
+val allTabs = listOf(
     Screen.Home,
-    Screen.Menu
+    Screen.Menu,
+    Screen.Expense
 )

@@ -1,0 +1,14 @@
+package com.semorka.fundly.core.features.menu.presentation
+
+import androidx.compose.runtime.Composable
+import com.semorka.fundly.core.data.DatastoreViewModel
+
+@Composable fun MenuScreen(
+    dstViewModel: DatastoreViewModel
+){
+    MenuContent(
+        onNewFunds = { funds ->
+            dstViewModel.setFunds(funds)
+        }
+    )
+}

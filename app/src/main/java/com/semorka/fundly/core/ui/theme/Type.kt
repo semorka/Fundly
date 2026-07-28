@@ -1,10 +1,12 @@
-package com.semorka.fundly.ui.theme
+package com.semorka.fundly.core.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.semorka.fundly.R
 
 // Set of Material typography styles to start with
 val Typography = Typography(
@@ -32,3 +34,6 @@ val Typography = Typography(
     )
     */
 )
+
+val MadimiFontFamily = FontFamily(Font(R.font.madimi_one))
+val TeachersFontFamily = FontFamily(Font(R.font.teachers))

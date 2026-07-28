@@ -1,4 +1,4 @@
-package com.semorka.fundly.ui
+package com.semorka.fundly.core.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding

@@ -1,6 +1,5 @@
-package com.semorka.fundly.ui.theme
+package com.semorka.fundly.core.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

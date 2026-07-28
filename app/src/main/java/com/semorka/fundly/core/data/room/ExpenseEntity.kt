@@ -8,5 +8,6 @@ data class ExpenseEntity (
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
     val cost: Double,
     val name: String,
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = System.currentTimeMillis(),
+    val schedule : Int? = null
 )

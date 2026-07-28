@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable fun BottomBar(currentScreen: Screen?, onTabSelected: (tab: Screen) -> Unit, modifier: Modifier = Modifier) {
     NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
-        allScreens.forEach { tab ->
+        allTabs.forEach { tab ->
             NavigationBarItem(
                 selected = tab == currentScreen,
                 onClick = {onTabSelected(tab)},

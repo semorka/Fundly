@@ -7,27 +7,27 @@ plugins {
 
 android {
     namespace = "com.semorka.fundly"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
-
     compileSdk = 37
 
     defaultConfig {
         applicationId = "com.semorka.fundly"
         minSdk = 29
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
-        release {
+        debug {
             isMinifyEnabled = false
+            isDebuggable = true
+        }
+
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -48,6 +48,7 @@ dependencies {
     implementation("androidx.datastore:datastore:1.2.1")
 
     implementation("com.google.dagger:hilt-android:2.60.1")
+    implementation(libs.androidx.compose.foundation)
     ksp("com.google.dagger:hilt-android-compiler:2.60.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.4.0")
 

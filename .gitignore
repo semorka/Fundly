@@ -30,5 +30,8 @@ captures/
 .DS_Store
 Thumbs.db
 
+.agents
+.artifacts
+
 # Firebase / Google services local configuration
 firebaseAppDistributionServiceCredentialsFile.json
