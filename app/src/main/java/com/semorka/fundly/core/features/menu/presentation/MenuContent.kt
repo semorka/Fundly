@@ -12,7 +12,7 @@ import androidx.compose.runtime.setValue
 
 @Composable
 fun MenuContent(
-    onNewFunds: (Int) -> Unit
+    onNewFunds: (Double) -> Unit
 ) {
     var amountText by remember { mutableStateOf("") }
 
@@ -28,7 +28,7 @@ fun MenuContent(
 
         Button(
             onClick = {
-                onNewFunds(amountText.toInt())
+                onNewFunds(amountText.toDouble())
             }) {
             Text("Set funds")
         }

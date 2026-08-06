@@ -5,16 +5,23 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -26,12 +33,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.semorka.fundly.R
+import com.semorka.fundly.core.data.room.Category
 import com.semorka.fundly.core.ui.theme.FundlyTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseContent(
-    onNewExpense: (Double, String, Int?) -> Unit
+    onNewExpense: (Double, String, Int?, Category?) -> Unit
 ){
     var expenseText by remember { mutableStateOf("") }
     var scheduleText by remember { mutableStateOf("") }
@@ -41,7 +51,9 @@ fun ExpenseContent(
     val options = listOf("Every day", "Every week", "Every month")
     val optionKeys = listOf(1, 4, 30)
     var expanded by remember { mutableStateOf(false) }
+    var expanded2 by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(options[0]) }
+    var selectedCategory by remember { mutableStateOf<Category?>(null)}
 
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
         TextField(
@@ -109,12 +121,66 @@ fun ExpenseContent(
             }
         }
 
+        ExposedDropdownMenuBox(
+            expanded = expanded2,
+            onExpandedChange = { expanded2 = !expanded2},
+        ) {
+            OutlinedTextField(
+                value = selectedCategory?.title ?: "No category",
+                onValueChange = {},
+                readOnly = true,
+                label = { Text("Category") },
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = selectedCategory?.iconRes ?: R.drawable.ic_menu),
+                        contentDescription = null
+                    )
+                },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded2)
+                },
+                colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+                modifier = Modifier
+                    .menuAnchor(
+                        type = ExposedDropdownMenuAnchorType.PrimaryNotEditable,
+                        enabled = true
+                    )
+                    .fillMaxWidth()
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded2,
+                onDismissRequest = { expanded2 = false }
+            ) {
+                Category.entries.forEach { category ->
+                    DropdownMenuItem(
+                        text = {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    painter = painterResource(id = category.iconRes),
+                                    contentDescription = null
+                                )
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Text(text = category.title)
+                            }
+                        },
+                        onClick = {
+                            selectedCategory = category
+                            expanded2 = false
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                    )
+                }
+            }
+        }
+
         Button(
             onClick = {
                 onNewExpense(
                     expenseText.toDouble(),
                     "expense",
-                    if (scheduleChecked) scheduleText.toInt() else null
+                    if (scheduleChecked) scheduleText.toInt() else null,
+                    selectedCategory
                 )
             },
             modifier = Modifier.fillMaxWidth(0.5f)
@@ -128,6 +194,6 @@ fun ExpenseContent(
 @Composable
 private fun ExpenseContentPreview() {
     FundlyTheme{
-        ExpenseContent{_, _, _ ->}
+        ExpenseContent{_, _, _, _ ->}
     }
 }

@@ -5,49 +5,41 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.semorka.fundly.core.data.room.Category
 import com.semorka.fundly.core.data.room.ExpenseEntity
+import com.semorka.fundly.core.features.home.ExpenseCard
 import com.semorka.fundly.core.features.home.PercentIndicator
 import com.semorka.fundly.core.ui.DefaultText
 import com.semorka.fundly.core.ui.theme.FundlyTheme
-import com.semorka.fundly.core.ui.theme.NeutralSurfaceWhite
 import com.semorka.fundly.core.ui.theme.NeutralWarmBackground
-import com.semorka.fundly.core.ui.theme.Pink40
 import com.semorka.fundly.core.ui.theme.TeachersFontFamily
-import com.semorka.fundly.core.utils.formatDate
-import com.semorka.fundly.core.utils.ignoreHeight
+import com.semorka.fundly.core.utils.formatToTwoDecimals
 import com.semorka.fundly.core.utils.trimZeroDecimal
 
 @Composable
 fun HomeContent(
-    funds: Int,
+    funds: Double,
     oneTimeExpenses: List<ExpenseEntity>,
     scheduledExpenses: List<ExpenseEntity>,
-    getScheduledAmount : (ExpenseEntity) -> Double,
+    getScheduledAmount: (ExpenseEntity) -> Double,
     totalExpenses: Double
 ) {
     val spentPercent = remember(totalExpenses, funds) {
@@ -72,37 +64,89 @@ fun HomeContent(
         ) {
             if (funds > 0) {
                 Card(
-                    elevation = CardDefaults.cardElevation(16.dp),
-                    modifier = Modifier.weight(1f).padding(bottom=16.dp)
-                ){
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(28.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color.White
+                    ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp)
+                ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 20.dp, horizontal = 16.dp)
                     ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            DefaultText("${spentPercent.toInt()}%", fontSize = 30)
-                            CircularProgressIndicator(
-                                progress = { (spentPercent / 100).toFloat() },
-                                modifier = Modifier.size(100.dp),
-                                trackColor = Color(0xFFEFECE6),
-                                strokeWidth = 12.dp,
-                                strokeCap = StrokeCap.Round
-                            )
-                        }
-//                        PercentIndicator(
-//                            spentPercent
-//                        )
+                        PercentIndicator(
+                            percent = spentPercent,
+                            modifier = Modifier.size(125.dp)
+                        )
+
                         Column(
-                            Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ){
-                            DefaultText(
-                                "${totalExpenses.trimZeroDecimal()} spent", fontSize = 38, fontFamily = TeachersFontFamily
-                            )
-                            DefaultText(
-                                "${fundsLeft.trimZeroDecimal()} left", fontSize = 28, fontFamily = TeachersFontFamily
-                            )
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(2.dp)
+                            ) {
+                                DefaultText(
+                                    text = "Remaining Funds",
+                                    fontSize = 16
+                                )
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    if (fundsLeft < 10000) {
+                                        DefaultText(
+                                            text = "$${fundsLeft.formatToTwoDecimals()}",
+                                            fontSize = 34,
+                                            fontFamily = TeachersFontFamily,
+                                            fontWeight = FontWeight.Bold,
+                                            modifier = Modifier.alignByBaseline()
+                                        )
+                                        DefaultText(
+                                            text = "left",
+                                            fontSize = 23,
+                                            fontWeight = FontWeight.Medium,
+                                            modifier = Modifier.alignByBaseline()
+                                        )
+                                    }
+                                    else {
+                                        DefaultText(
+                                            text = "$${fundsLeft.toInt()}",
+                                            fontSize = 34,
+                                            fontFamily = TeachersFontFamily,
+                                            fontWeight = FontWeight.Bold,
+                                            modifier = Modifier.alignByBaseline()
+                                        )
+                                        DefaultText(
+                                            text = "left",
+                                            fontSize = 23,
+                                            fontWeight = FontWeight.Medium,
+                                            modifier = Modifier.alignByBaseline()
+                                        )
+                                    }
+                                }
+                            }
+
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(2.dp)
+                            ) {
+                                DefaultText(
+                                    text = "Total Spent",
+                                    fontSize = 16,
+                                    color = Color.Gray,
+
+                                )
+                                DefaultText(
+                                    text = "$${totalExpenses.formatToTwoDecimals()} spent",
+                                    fontSize = 19,
+                                    color = Color.Gray
+                                )
+                            }
                         }
                     }
                 }
@@ -121,29 +165,13 @@ fun HomeContent(
                             items = oneTimeExpenses,
                             key = { it.uid }
                         ) { expense ->
-                            val date = formatDate(expense.timestamp)
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(
                                     20.dp,
                                     Alignment.CenterHorizontally
                                 ), modifier = Modifier.fillMaxWidth()
                             ) {
-                                Card(
-                                    colors = CardDefaults.cardColors(NeutralSurfaceWhite),
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth().padding(16.dp)
-                                    ) {
-                                        Column(
-                                            modifier = Modifier.weight(1f)
-                                        ) {
-                                            DefaultText(expense.cost.trimZeroDecimal(), fontSize = 25)
-                                            DefaultText(expense.name, fontSize = 20)
-                                        }
-                                        DefaultText(date, fontSize = 18)
-                                    }
-                                }
+                                ExpenseCard(expense)
                             }
                         }
                     }
@@ -168,10 +196,18 @@ fun HomeContent(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            DefaultText(expense.cost.trimZeroDecimal(), fontSize = 25)
+                            DefaultText(
+                                expense.cost.trimZeroDecimal(),
+                                fontSize = 25
+                            )
                             DefaultText(expense.name, fontSize = 25)
-                            DefaultText("Every ${expense.schedule} days", fontSize = 20)
-                            DefaultText("Total ${getScheduledAmount(expense)}", fontSize = 14)
+                            DefaultText(
+                                "Every ${expense.schedule} days",
+                                fontSize = 20
+                            )
+                            DefaultText(
+                                "Total ${getScheduledAmount(expense)}"
+                            )
                         }
                     }
                 }
@@ -188,13 +224,14 @@ private fun HomeContentPreview() {
             ExpenseEntity(
                 uid = index,
                 cost = 99.5,
-                name = "new gaming keyboard",
-                schedule = null
+                name = "Pizza",
+                schedule = null,
+                category = Category.FOOD
             )
         }
 
         HomeContent(
-            funds = 1000,
+            funds = 19999.99,
             oneTimeExpenses = oneTimeExpenses,
             scheduledExpenses = listOf(
                 ExpenseEntity(
@@ -205,7 +242,7 @@ private fun HomeContentPreview() {
                 )
             ),
             getScheduledAmount = { _ -> 20.0 },
-            totalExpenses = 100.0
+            totalExpenses = 0.0
         )
     }
 }

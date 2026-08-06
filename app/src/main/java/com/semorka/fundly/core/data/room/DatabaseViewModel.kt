@@ -42,13 +42,14 @@ class DatabaseViewModel @Inject constructor(
         initialValue = 0.0
     )
 
-    fun addExpense(cost: Double, name: String, schedule: Int? = null) {
+    fun addExpense(cost: Double, name: String, schedule: Int? = null, category: Category?) {
         viewModelScope.launch {
             dao.insert(
                 ExpenseEntity(
                     cost = cost,
                     name = name,
-                    schedule = schedule
+                    schedule = schedule,
+                    category = category
                 )
             )
         }

@@ -4,21 +4,20 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 
 class NavigationViewModel : ViewModel() {
-    private val _backStack = mutableStateListOf<Screen>(Screen.Home)
-
-    val backStack: List<Screen> get() = _backStack
+    val backStack: List<Screen>
+        field = mutableStateListOf<Screen>(Screen.Home)
 
     val currentScreen: Screen?
-        get() = _backStack.lastOrNull()
+        get() = backStack.lastOrNull()
 
     fun navigateTo(screen: Screen) {
         if (currentScreen != screen) {
-            _backStack.remove(screen)
-            _backStack.add(screen)
+            backStack.remove(screen)
+            backStack.add(screen)
         }
     }
 
     fun onBack() {
-        _backStack.removeLastOrNull()
+        backStack.removeLastOrNull()
     }
 }

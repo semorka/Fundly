@@ -9,7 +9,7 @@ import com.semorka.fundly.core.ui.theme.FundlyTheme
 fun ExpenseScreen(
     dbViewModel : DatabaseViewModel
 ) {
-    ExpenseContent( onNewExpense = { cost, name, schedule ->
-        dbViewModel.addExpense(cost,name, schedule)
+    ExpenseContent( onNewExpense = { cost, name, schedule, category ->
+        dbViewModel.addExpense(cost,name, schedule, category)
     })
 }

@@ -5,6 +5,6 @@ import java.util.Date
 import java.util.Locale
 
 fun formatDate(timestamp: Long): String {
-    val format = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+    val format = SimpleDateFormat("MMM d, HH:mm a", Locale.US)
     return format.format(Date(timestamp))
 }

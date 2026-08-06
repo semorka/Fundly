@@ -12,3 +12,6 @@ val Pink40 = Color(0xFF7D5260)
 
 val NeutralWarmBackground = Color(0xFFEFECE6)
 val NeutralSurfaceWhite = Color(0xFFFFFFFF)
+
+val FoodCategoryBackground = Color(0xFFFDE8D7)
+val FoodCategoryIcon = Color(0xFFC87A51)

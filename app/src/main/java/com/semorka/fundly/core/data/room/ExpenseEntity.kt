@@ -9,5 +9,6 @@ data class ExpenseEntity (
     val cost: Double,
     val name: String,
     val timestamp: Long = System.currentTimeMillis(),
-    val schedule : Int? = null
+    val schedule : Int? = null,
+    val category: Category? = null
 )

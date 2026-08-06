@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.doublePreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -26,18 +27,18 @@ class DatastoreViewModel @Inject constructor(
 ) : ViewModel() {
 
     private object PreferencesKeys {
-        val USER_FUNDS = intPreferencesKey("user_funds")
+        val USER_FUNDS = doublePreferencesKey("user_funds")
     }
 
-    val userFundsFlow: StateFlow<Int> = application.dataStore.data
-        .map { preferences -> preferences[USER_FUNDS] ?: -1 }
+    val userFundsFlow: StateFlow<Double> = application.dataStore.data
+        .map { preferences -> preferences[USER_FUNDS] ?: 0.0 }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = 0
+            initialValue = 0.0
         )
 
-    fun setFunds(funds: Int) {
+    fun setFunds(funds: Double) {
         viewModelScope.launch {
             application.dataStore.edit { preferences ->
                 preferences[USER_FUNDS] = funds
