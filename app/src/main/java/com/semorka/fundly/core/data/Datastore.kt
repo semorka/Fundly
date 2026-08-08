@@ -19,18 +19,16 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
-
 @HiltViewModel
 class DatastoreViewModel @Inject constructor(
-    private val application: Application
+    private val dataStore: DataStore<Preferences>
 ) : ViewModel() {
 
     private object PreferencesKeys {
         val USER_FUNDS = doublePreferencesKey("user_funds")
     }
 
-    val userFundsFlow: StateFlow<Double> = application.dataStore.data
+    val userFundsFlow: StateFlow<Double> = dataStore.data
         .map { preferences -> preferences[USER_FUNDS] ?: 0.0 }
         .stateIn(
             scope = viewModelScope,
@@ -40,7 +38,7 @@ class DatastoreViewModel @Inject constructor(
 
     fun setFunds(funds: Double) {
         viewModelScope.launch {
-            application.dataStore.edit { preferences ->
+            dataStore.edit { preferences ->
                 preferences[USER_FUNDS] = funds
             }
         }

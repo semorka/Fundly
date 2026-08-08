@@ -2,6 +2,8 @@ package com.semorka.fundly.core.features.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,6 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,20 +33,26 @@ fun PercentIndicator(
     percent: Double,
     modifier: Modifier = Modifier
 ) {
-    Box(
+    BoxWithConstraints(
         contentAlignment = Alignment.Center,
-        modifier = modifier
+        modifier = modifier.aspectRatio(1f)
     ) {
+        val minDimension = minOf(maxWidth, maxHeight)
+
+        val fontSize = (minDimension.value * 0.25f)
+
+        val strokeWidth = minDimension * 0.08f
+
         DefaultText(
-            "${percent.toInt()}%",
-            fontSize = 32
+            text = "${percent.toInt()}%",
+            fontSize = fontSize.toInt()
         )
         CircularProgressIndicator(
             progress = { (percent / 100).toFloat() },
             modifier = Modifier.fillMaxSize(),
             color = Color(0xFF9ED6C6),
             trackColor = Color(0xFFE3DCD0),
-            strokeWidth = 16.dp,
+            strokeWidth = strokeWidth,
             strokeCap = StrokeCap.Round
         )
     }

@@ -1,7 +1,9 @@
 package com.semorka.fundly
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,8 +19,6 @@ import com.semorka.fundly.core.navigation.NavigationViewModel
 @Preview
 @Composable fun FundlyApp() {
     val navigationVm: NavigationViewModel = viewModel()
-    val dbViewModel : DatabaseViewModel = hiltViewModel()
-    val dstViewModel : DatastoreViewModel = hiltViewModel()
     Scaffold(
         bottomBar = {
             BottomBar(
@@ -27,14 +27,13 @@ import com.semorka.fundly.core.navigation.NavigationViewModel
                     navigationVm.navigateTo(tab)
                 }
             )
-        }
+        },
+        modifier = Modifier.background(MaterialTheme.colorScheme.background)
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             AppNavigation(
                 navigationVm.backStack,
-                onBack = { navigationVm.onBack() },
-                dbViewModel = dbViewModel,
-                dstViewModel = dstViewModel
+                onBack = { navigationVm.onBack() }
             )
         }
     }

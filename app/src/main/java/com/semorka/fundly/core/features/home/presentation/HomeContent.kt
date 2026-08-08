@@ -53,7 +53,6 @@ fun HomeContent(
     }
 
     Surface(
-        color = NeutralWarmBackground,
         modifier = Modifier.fillMaxSize()
     ){
         Column(
@@ -242,7 +241,7 @@ private fun HomeContentPreview() {
                 )
             ),
             getScheduledAmount = { _ -> 20.0 },
-            totalExpenses = 0.0
+            totalExpenses = 10000.0
         )
     }
 }

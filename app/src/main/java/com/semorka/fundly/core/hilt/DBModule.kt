@@ -1,6 +1,10 @@
-package com.semorka.fundly.core.data.room
+package com.semorka.fundly.core.hilt
+
+import android.app.Application
 import android.content.Context
 import androidx.room.Room
+import com.semorka.fundly.core.data.room.AppDatabase
+import com.semorka.fundly.core.data.room.ExpenseDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

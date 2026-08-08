@@ -11,9 +11,7 @@ import com.semorka.fundly.core.features.menu.presentation.MenuScreen
 
 @Composable fun AppNavigation(
     backStack: List<Screen>,
-    onBack: () -> Unit,
-    dbViewModel : DatabaseViewModel,
-    dstViewModel : DatastoreViewModel
+    onBack: () -> Unit
 ){
     NavDisplay(
         backStack = backStack,
@@ -21,15 +19,15 @@ import com.semorka.fundly.core.features.menu.presentation.MenuScreen
         entryProvider = { key ->
             when (key) {
                 Screen.Home -> NavEntry(key) {
-                    HomeScreen(dbViewModel, dstViewModel)
+                    HomeScreen()
                 }
 
                 Screen.Menu -> NavEntry(key) {
-                    MenuScreen(dstViewModel)
+                    MenuScreen()
                 }
 
                 Screen.Expense -> NavEntry(key) {
-                    ExpenseScreen(dbViewModel)
+                    ExpenseScreen()
                 }
             }
         }

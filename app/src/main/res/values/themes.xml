@@ -2,4 +2,12 @@
 <resources>
 
     <style name="Theme.Fundly" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Fundly.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/black</item>
+
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher</item>
+
+        <item name="postSplashScreenTheme">@style/Theme.Fundly</item>
+    </style>
 </resources>
