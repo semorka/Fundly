@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.semorka.fundly.R
 import com.semorka.fundly.core.data.room.Category
+import com.semorka.fundly.core.features.expense.NumberField
 import com.semorka.fundly.core.ui.theme.FundlyTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,26 +45,29 @@ import com.semorka.fundly.core.ui.theme.FundlyTheme
 fun ExpenseContent(
     onNewExpense: (Double, String, Int?, Category?) -> Unit
 ){
-    var expenseText by remember { mutableStateOf("") }
-    var scheduleText by remember { mutableStateOf("") }
+    var expenseText by rememberSaveable { mutableStateOf("") }
+    var scheduleText by rememberSaveable { mutableStateOf("") }
 
-    var scheduleChecked by remember { mutableStateOf(false) }
+    var scheduleChecked by rememberSaveable { mutableStateOf(false) }
 
     val options = listOf("Every day", "Every week", "Every month")
     val optionKeys = listOf(1, 4, 30)
-    var expanded by remember { mutableStateOf(false) }
-    var expanded2 by remember { mutableStateOf(false) }
-    var selectedOptionText by remember { mutableStateOf(options[0]) }
-    var selectedCategory by remember { mutableStateOf<Category?>(null)}
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    var expanded2 by rememberSaveable { mutableStateOf(false) }
+    var selectedOptionText by rememberSaveable { mutableStateOf(options[0]) }
+    var selectedCategory by rememberSaveable { mutableStateOf<Category?>(null)}
 
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-        TextField(
+        NumberField(
             value = expenseText,
             onValueChange = { newValue ->
-                if (newValue.all { it.isDigit() }) {
-                    expenseText = newValue
+                val sanitized = newValue.replace(',', '.')
+
+                if (sanitized.isEmpty() || sanitized.matches(Regex("""^\d*\.?\d{0,2}$"""))) {
+                    expenseText = sanitized
                 }
-            }
+            },
+            label = ""
         )
 
         Row(
@@ -109,14 +114,14 @@ fun ExpenseContent(
                         }
                     }
                 }
-                TextField(
+                NumberField(
                     value = scheduleText,
                     onValueChange = { newValue ->
                         if (newValue.all { it.isDigit() }) {
                             scheduleText = newValue
                         }
                     },
-                    label = { Text("Every N days") }
+                    label =  "Every N days"
                 )
             }
         }

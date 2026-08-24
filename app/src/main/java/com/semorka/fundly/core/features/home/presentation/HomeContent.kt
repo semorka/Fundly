@@ -5,12 +5,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -29,7 +34,7 @@ import com.semorka.fundly.core.features.home.ExpenseCard
 import com.semorka.fundly.core.features.home.PercentIndicator
 import com.semorka.fundly.core.ui.DefaultText
 import com.semorka.fundly.core.ui.theme.FundlyTheme
-import com.semorka.fundly.core.ui.theme.NeutralWarmBackground
+import com.semorka.fundly.core.ui.theme.NeutralSurfaceWhite
 import com.semorka.fundly.core.ui.theme.TeachersFontFamily
 import com.semorka.fundly.core.utils.formatToTwoDecimals
 import com.semorka.fundly.core.utils.trimZeroDecimal
@@ -40,7 +45,8 @@ fun HomeContent(
     oneTimeExpenses: List<ExpenseEntity>,
     scheduledExpenses: List<ExpenseEntity>,
     getScheduledAmount: (ExpenseEntity) -> Double,
-    totalExpenses: Double
+    totalExpenses: Double,
+    maxOneTimeExpenses: Int = 5
 ) {
     val spentPercent = remember(totalExpenses, funds) {
         if (funds > 0) {
@@ -52,25 +58,32 @@ fun HomeContent(
         funds - totalExpenses
     }
 
+    val displayedOneTimeExpenses = remember(oneTimeExpenses, maxOneTimeExpenses) {
+        oneTimeExpenses.takeLast(maxOneTimeExpenses)
+    }
+
+    val scrollState = rememberScrollState()
+
     Surface(
-        modifier = Modifier.fillMaxSize()
-    ){
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(17.dp)
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .padding(17.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (funds > 0) {
                 Card(
                     shape = androidx.compose.foundation.shape.RoundedCornerShape(28.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.White
+                        containerColor = MaterialTheme.colorScheme.surface
                     ),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 24.dp)
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -98,32 +111,31 @@ fun HomeContent(
                                 Row(
                                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                                 ) {
-                                    if (fundsLeft < 10000) {
+                                    if (fundsLeft < 1000) {
                                         DefaultText(
                                             text = "$${fundsLeft.formatToTwoDecimals()}",
-                                            fontSize = 34,
+                                            fontSize = 30,
                                             fontFamily = TeachersFontFamily,
                                             fontWeight = FontWeight.Bold,
                                             modifier = Modifier.alignByBaseline()
                                         )
                                         DefaultText(
                                             text = "left",
-                                            fontSize = 23,
+                                            fontSize = 20,
                                             fontWeight = FontWeight.Medium,
                                             modifier = Modifier.alignByBaseline()
                                         )
-                                    }
-                                    else {
+                                    } else {
                                         DefaultText(
                                             text = "$${fundsLeft.toInt()}",
-                                            fontSize = 34,
+                                            fontSize = 30,
                                             fontFamily = TeachersFontFamily,
                                             fontWeight = FontWeight.Bold,
                                             modifier = Modifier.alignByBaseline()
                                         )
                                         DefaultText(
                                             text = "left",
-                                            fontSize = 23,
+                                            fontSize = 20,
                                             fontWeight = FontWeight.Medium,
                                             modifier = Modifier.alignByBaseline()
                                         )
@@ -137,8 +149,7 @@ fun HomeContent(
                                 DefaultText(
                                     text = "Total Spent",
                                     fontSize = 16,
-                                    color = Color.Gray,
-
+                                    color = Color.Gray
                                 )
                                 DefaultText(
                                     text = "$${totalExpenses.formatToTwoDecimals()} spent",
@@ -150,62 +161,59 @@ fun HomeContent(
                     }
                 }
             }
-            Column(
-                Modifier.weight(5f),
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                Box(
-                    Modifier.weight(3f)
+
+            displayedOneTimeExpenses.forEach { expense ->
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(
+                        20.dp,
+                        Alignment.CenterHorizontally
+                    ),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        items(
-                            items = oneTimeExpenses,
-                            key = { it.uid }
-                        ) { expense ->
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(
-                                    20.dp,
-                                    Alignment.CenterHorizontally
-                                ), modifier = Modifier.fillMaxWidth()
-                            ) {
-                                ExpenseCard(expense)
-                            }
-                        }
-                    }
+                    ExpenseCard(expense)
                 }
-                Column(
-                    Modifier.weight(2f)
+            }
+
+            if (scheduledExpenses.isNotEmpty()) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .padding(vertical = 8.dp)
                 ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.primaryContainer)
-                    ) {
-                        DefaultText("Scheduled", fontSize = 20)
-                    }
-                    scheduledExpenses.forEach { expense ->
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(
-                                20.dp,
-                                Alignment.CenterHorizontally
-                            ),
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth()
+                    DefaultText("Scheduled", fontSize = 20)
+                }
+
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(
+                        20.dp,
+                        Alignment.CenterHorizontally
+                    ),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    items(scheduledExpenses) { expense ->
+                        Card(
+                            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
+                            modifier = Modifier.height(160.dp)
                         ) {
                             DefaultText(
-                                expense.cost.trimZeroDecimal(),
-                                fontSize = 25
-                            )
-                            DefaultText(expense.name, fontSize = 25)
-                            DefaultText(
                                 "Every ${expense.schedule} days",
-                                fontSize = 20
+                                fontSize = 20,
+                                modifier = Modifier.background(MaterialTheme.colorScheme.primary).padding(6.dp)
+                            )
+                            DefaultText(expense.name, fontSize = 25, fontWeight = FontWeight.Medium)
+
+                            Spacer(modifier = Modifier.weight(1f))
+
+                            DefaultText(
+                                "-$${expense.cost.trimZeroDecimal()}",
+                                fontSize = 25,
+                                fontWeight = FontWeight.Medium
                             )
                             DefaultText(
-                                "Total ${getScheduledAmount(expense)}"
+                                "Total $${getScheduledAmount(expense)}\nsince created"
                             )
                         }
                     }
@@ -218,7 +226,7 @@ fun HomeContent(
 @Preview(showBackground = true)
 @Composable
 private fun HomeContentPreview() {
-    FundlyTheme {
+    FundlyTheme(darkTheme = true) {
         val oneTimeExpenses = List(16) { index ->
             ExpenseEntity(
                 uid = index,
@@ -229,17 +237,20 @@ private fun HomeContentPreview() {
             )
         }
 
+        val scheduledExpenses = List(4) { index ->
+            ExpenseEntity(
+                uid = index,
+                cost = 99.5,
+                name = "Pizza",
+                schedule = index,
+                category = Category.FOOD
+            )
+        }
+
         HomeContent(
             funds = 19999.99,
             oneTimeExpenses = oneTimeExpenses,
-            scheduledExpenses = listOf(
-                ExpenseEntity(
-                    uid = 99999,
-                    cost = 20.0,
-                    name = "Transport",
-                    schedule = 1
-                )
-            ),
+            scheduledExpenses = scheduledExpenses,
             getScheduledAmount = { _ -> 20.0 },
             totalExpenses = 10000.0
         )

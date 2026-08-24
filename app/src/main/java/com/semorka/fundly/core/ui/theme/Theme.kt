@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val LightColorScheme = lightColorScheme(
-    background = BackgroundLight,
+    background = NeutralWarmBackground,
     surface = SurfaceLight,
     onBackground = PrimaryTextLight,
     onSurface = PrimaryTextLight,
@@ -37,8 +37,7 @@ private val DarkColorScheme = darkColorScheme(
 @Composable
 fun FundlyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

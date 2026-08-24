@@ -31,16 +31,16 @@ import com.semorka.fundly.core.utils.trimZeroDecimal
 @Composable fun ExpenseCard(expense: ExpenseEntity){
     val date = formatDate(expense.timestamp)
     Card(
-        colors = CardDefaults.cardColors(NeutralSurfaceWhite),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            expense.category?.iconRes.let {
+            expense.category?.let { category ->
                 Icon(
-                    painter = painterResource(id = expense.category!!.iconRes),
+                    painter = painterResource(id = category.iconRes),
                     modifier = Modifier
                         .size(60.dp)
                         .background(FoodCategoryBackground, CircleShape)

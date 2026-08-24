@@ -3,9 +3,11 @@ package com.semorka.fundly.core.data.room
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,11 +38,13 @@ class DatabaseViewModel @Inject constructor(
         val oneTimeSum = oneTimeList.sumOf { it.cost }
         val scheduledSum = scheduledList.sumOf { getScheduledAmount(it) }
         oneTimeSum + scheduledSum
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = 0.0
-    )
+    }
+        .flowOn(Dispatchers.Default)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = 0.0
+        )
 
     fun addExpense(cost: Double, name: String, schedule: Int? = null, category: Category?) {
         viewModelScope.launch {
