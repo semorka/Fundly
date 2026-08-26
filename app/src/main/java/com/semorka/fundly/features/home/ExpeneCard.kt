@@ -1,4 +1,4 @@
-package com.semorka.fundly.core.features.home
+package com.semorka.fundly.features.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,7 +23,6 @@ import com.semorka.fundly.core.data.room.ExpenseEntity
 import com.semorka.fundly.core.ui.DefaultText
 import com.semorka.fundly.core.ui.theme.FoodCategoryBackground
 import com.semorka.fundly.core.ui.theme.FoodCategoryIcon
-import com.semorka.fundly.core.ui.theme.NeutralSurfaceWhite
 import com.semorka.fundly.core.utils.formatDate
 import com.semorka.fundly.core.utils.trimZeroDecimal
 

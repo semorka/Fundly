@@ -1,4 +1,4 @@
-package com.semorka.fundly.core.features.menu.presentation
+package com.semorka.fundly.features.menu.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel

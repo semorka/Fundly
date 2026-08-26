@@ -1,4 +1,4 @@
-package com.semorka.fundly.core.features.home.presentation
+package com.semorka.fundly.features.home.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

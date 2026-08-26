@@ -1,4 +1,4 @@
-package com.semorka.fundly.core.features.home.presentation
+package com.semorka.fundly.features.home.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -30,11 +30,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.semorka.fundly.core.data.room.Category
 import com.semorka.fundly.core.data.room.ExpenseEntity
-import com.semorka.fundly.core.features.home.ExpenseCard
-import com.semorka.fundly.core.features.home.PercentIndicator
+import com.semorka.fundly.features.home.ExpenseCard
+import com.semorka.fundly.features.home.PercentIndicator
 import com.semorka.fundly.core.ui.DefaultText
 import com.semorka.fundly.core.ui.theme.FundlyTheme
-import com.semorka.fundly.core.ui.theme.NeutralSurfaceWhite
 import com.semorka.fundly.core.ui.theme.TeachersFontFamily
 import com.semorka.fundly.core.utils.formatToTwoDecimals
 import com.semorka.fundly.core.utils.trimZeroDecimal
@@ -78,7 +77,7 @@ fun HomeContent(
         ) {
             if (funds > 0) {
                 Card(
-                    shape = androidx.compose.foundation.shape.RoundedCornerShape(28.dp),
+                    shape = RoundedCornerShape(28.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.surface
                     ),

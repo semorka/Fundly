@@ -1,4 +1,4 @@
-package com.semorka.fundly.core.features.menu.presentation
+package com.semorka.fundly.features.menu.presentation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button

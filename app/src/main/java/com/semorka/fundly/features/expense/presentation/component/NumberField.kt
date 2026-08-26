@@ -1,4 +1,4 @@
-package com.semorka.fundly.core.features.expense
+package com.semorka.fundly.features.expense.presentation.component
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
