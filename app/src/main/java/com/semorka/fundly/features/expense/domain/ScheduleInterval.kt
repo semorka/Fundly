@@ -1,4 +1,4 @@
-package com.semorka.fundly.features.expense
+package com.semorka.fundly.features.expense.domain
 
 enum class ScheduleInterval (
     val daysCount: Int,

@@ -13,7 +13,7 @@ import com.semorka.fundly.features.menu.presentation.MenuScreen
 ){
     NavDisplay(
         backStack = backStack,
-        onBack = {onBack},
+        onBack = {onBack()},
         entryProvider = { key ->
             when (key) {
                 Screen.Home -> NavEntry(key) {

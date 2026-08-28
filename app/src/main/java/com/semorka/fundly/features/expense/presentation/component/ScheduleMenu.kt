@@ -14,27 +14,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.semorka.fundly.R
-import com.semorka.fundly.features.expense.ScheduleInterval
+import com.semorka.fundly.features.expense.domain.ScheduleInterval
 
 @Composable
 fun ScheduleMenu(
-    modifier: Modifier = Modifier,
     scheduleText: String,
-    onScheduleTextChanged: (String) -> Unit
+    onScheduleTextChanged: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.height(IntrinsicSize.Min)
+        modifier = Modifier.height(IntrinsicSize.Min).then(modifier)
     ) {
         Box(
             modifier = Modifier.fillMaxHeight(),
@@ -72,7 +70,7 @@ fun ScheduleMenu(
                     onScheduleTextChanged(newText)
                 }
             },
-            label = "Every N days"
+            placeholder = "Every N days"
         )
     }
 }

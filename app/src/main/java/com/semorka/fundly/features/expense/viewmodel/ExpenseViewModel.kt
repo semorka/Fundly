@@ -1,8 +1,8 @@
-package com.semorka.fundly.features.expense.presentation
+package com.semorka.fundly.features.expense.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.semorka.fundly.core.data.room.Category
-import com.semorka.fundly.features.expense.ExpenseFormState
+import com.semorka.fundly.features.expense.domain.ExpenseFormState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +14,10 @@ import kotlinx.coroutines.flow.update
 class ExpenseViewModel @Inject constructor(): ViewModel() {
     private val _formState = MutableStateFlow(ExpenseFormState())
     val formState: StateFlow<ExpenseFormState> = _formState.asStateFlow()
+
+    fun updateExpenseName(name: String) {
+        _formState.update { it.copy(expenseName = name) }
+    }
 
     fun updateExpenseText(text: String) {
         _formState.update { it.copy(expenseText = text) }

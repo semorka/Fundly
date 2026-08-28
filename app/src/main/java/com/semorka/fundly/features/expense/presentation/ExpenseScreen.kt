@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.semorka.fundly.core.data.room.DatabaseViewModel
-import kotlin.math.exp
+import com.semorka.fundly.features.expense.viewmodel.ExpenseViewModel
 
 @Composable
 fun ExpenseScreen(
@@ -12,10 +12,17 @@ fun ExpenseScreen(
     expenseViewModel: ExpenseViewModel = hiltViewModel()
 ) {
     val state = expenseViewModel.formState.collectAsStateWithLifecycle().value
+
     ExpenseContent(
-        onNewExpense = { cost, name, schedule, category ->
-            dbViewModel.addExpense(cost,name, schedule, category) },
+        onNewExpense = {
+            dbViewModel.addExpense(
+                cost = state.expenseText.toDoubleOrNull() ?: 0.0,
+                name = state.expenseName,
+                schedule = state.scheduleText.toIntOrNull(),
+                category = state.selectedCategory
+            ) },
         state = state,
+        onExpenseNameChanged = { expenseViewModel.updateExpenseName(it) },
         onExpenseTextChanged = { expenseViewModel.updateExpenseText(it) },
         onScheduleToggled = { expenseViewModel.toggleSchedule() },
         onScheduleTextChanged = { expenseViewModel.updateScheduleText(it) },

@@ -1,4 +1,4 @@
-package com.semorka.fundly.features.home
+package com.semorka.fundly.features.home.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

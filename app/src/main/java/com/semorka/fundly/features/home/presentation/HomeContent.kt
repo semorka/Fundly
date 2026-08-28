@@ -30,8 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.semorka.fundly.core.data.room.Category
 import com.semorka.fundly.core.data.room.ExpenseEntity
-import com.semorka.fundly.features.home.ExpenseCard
-import com.semorka.fundly.features.home.PercentIndicator
+import com.semorka.fundly.features.home.presentation.component.ExpenseCard
+import com.semorka.fundly.features.home.presentation.component.PercentIndicator
 import com.semorka.fundly.core.ui.DefaultText
 import com.semorka.fundly.core.ui.theme.FundlyTheme
 import com.semorka.fundly.core.ui.theme.TeachersFontFamily
